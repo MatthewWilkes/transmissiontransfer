@@ -51,11 +51,13 @@ def main():
             logger.debug("Added {}".format(new_torrent))
         else:
             new_torrent = [nt for nt in destination_torrents if nt.hashString == torrent.hashString][0]
-            if new_torrent.progress == 100.0 and new_torrent.status == 'stopped':
-                logger.info("Starting {}".format(new_torrent))
-                new_torrent.start()
-                logger.info("Stopping {}".format(torrent))
-                torrent.stop()
+            if new_torrent.progress == 100.0:
+                if new_torrent.status == 'stopped':
+                    logger.info("Starting {}".format(new_torrent))
+                    new_torrent.start()
+                if torrent.status != 'stopped':
+                    logger.info("Stopping {}".format(torrent))
+                    torrent.stop()
                 continue
         
         if new_torrent.name != torrent.name:
